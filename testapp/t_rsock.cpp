@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 int main(){
-    std::cout << "Hello world!" << std::endl;
+    std::cout << "Rawsocket testapp" << std::endl;
     const int rsock = get_rawsocket(IPPROTO_ICMP);
 
     while (1) {

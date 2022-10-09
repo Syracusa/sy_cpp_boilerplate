@@ -7,11 +7,22 @@ mkdir build && cd build
 cmake ..
 make
 ```
-# Execute
-+ Use sudo to recv rawsocket
+
+# Features
++ Raw socket recv
++ Memory-mapped file 
+
+# Testapps
+## rsock
++ Raw socket recv test app.
++ You need to use sudo to recv rawsocket packet.
+
+## mmap
++ Memory-mapped file example
++ Write 1GB dummy data and delete temporary file.
 
 # Directory
  + TBD
 
 # TODO
- + Add socket programming example
+ + Add rawsocket send feature
