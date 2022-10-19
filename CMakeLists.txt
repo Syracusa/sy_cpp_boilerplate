@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(sy_cpp_boilerplate)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
 
