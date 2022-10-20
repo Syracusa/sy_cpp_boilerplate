@@ -1,38 +1,15 @@
 #include <iostream>
-#include <sstream>
+#include <fstream>
 #include <string>
 #include <unordered_map>
 
 std::unordered_map<std::string, int> umap = {};
 
-const char* text = "Lorem ipsum dolor sit amet,"
-" consectetur adipiscing elit, sed do eiusmod tempor"
-" incididunt ut labore et dolore magna aliqua. Ut enim"
-" ad minim veniam, quis nostrud exercitation ullamco"
-" laboris nisi ut aliquip ex ea commodo consequat. "
-"Duis aute irure dolor in reprehenderit in voluptate"
-" velit esse cillum dolore eu fugiat nulla pariatur."
-" Excepteur sint occaecat cupidatat non proident, sunt"
-" in culpa qui officia deserunt mollit anim id est laborum.";
+const char *text = "An iterator type whose category, value, difference, pointer and"
+                   "reference types are the same as iterator. This iterator"
+                   "can be used to iterate through a single bucket but not across buckets";
 
-static void test()
-{
-    std::istringstream iss(text);
-
-    char val;
-    for (int i = 0; i < 10; i++){
-        iss >> val;
-        std::cout << val;
-    }
-
-    #if 0
-    char *word;
-    for (int i = 0; i < 4; i++){
-        iss.getline(word, 20);
-        std::cout << word << std::endl;
-    }
-    #endif
-}
+#define FROMFILE 1
 
 #define MAX_WORD_LEN 100
 static void count()
@@ -40,39 +17,79 @@ static void count()
     int pos = 0;
     int wpos = 0;
     char wordbuf[MAX_WORD_LEN];
+    std::ifstream in("../static/sample.txt");
+    int out = 0;
+    char c;
 
-    while(1)
+#if FROMFILE
+    if (!in.is_open())
     {
-        char c = text[pos];
-        pos++;
-
-        if (c == '\0')
-            break;    
-
-        if (c == ' '){
-            if (wpos != 0){
-                wordbuf[wpos] = '\0';
-                if (umap[wordbuf]){
-                    umap[wordbuf] += 1;
-                } else {
-                    umap[wordbuf] = 1;
-                }
-                std::cout << wordbuf << " " << umap[wordbuf] << std::endl;
-            }
-            wpos = 0;
-        } else {
-            wordbuf[wpos] = c; 
-            wpos++;
-        }
-
-        // putchar(c);
+        std::cerr << "Can't open file\n";
+        return;
     }
 
+    while (in.good())
+    {
+        in.get(c);
+#else
+
+    while (1)
+    {
+
+        char c = text[pos];
+#endif
+        c = tolower(c);
+
+        switch (c)
+        {
+        case '\0':
+        {
+            out = 1;
+            break;
+        }
+        case ' ':
+        {
+            if (wpos != 0)
+            {
+                wordbuf[wpos] = '\0';
+                if (umap[wordbuf])
+                {
+                    umap[wordbuf] += 1;
+                }
+                else
+                {
+                    umap[wordbuf] = 1;
+                }
+            }
+            wpos = 0;
+            break;
+        }
+        case '.':
+        case '!':
+        case '?':
+        case ':':
+        case ',':
+            break;
+        default:
+            wordbuf[wpos] = c;
+            wpos++;
+            break;
+        }
+
+        if (out)
+            break;
+        pos++;
+    }
+#if FROMFILE
+    in.close();
+#endif
+    for (auto elem : umap)
+    {
+        std::cout << elem.first << " " << elem.second << "\n";
+    }
 }
 
 int main()
 {
-    // std::unordered_map<std::string, int> umap = {};
-    // test();
     count();
 }
