@@ -1,5 +1,5 @@
 # sy-cpp-boilerplate
- + Boilerplate code for linux cpp
+ + Example code snippsets for linux cpp
 
 # Build
 ```
@@ -8,17 +8,14 @@ cmake ..
 make
 ```
 
-# Features
-+ Raw socket recv
-+ Memory-mapped file 
-
-# Testapps
+# Example apps
 ## rsock
-+ Raw socket recv test app.
++ Raw socket recv example app.
 + You need to use sudo to recv rawsocket packet.
 
-## stl
-+ STL Example 
+## stl_map
++ STL MAP example
++ Read text and count words
 
 # Directory
  + TBD
