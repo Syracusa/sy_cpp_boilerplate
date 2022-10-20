@@ -7,7 +7,7 @@ std::unordered_map<std::string, int> umap = {};
 
 const char *text = "An iterator type whose category, value, difference, pointer and"
                    "reference types are the same as iterator. This iterator"
-                   "can be used to iterate through a single bucket but not across buckets";
+                   "can be used to iterate through a single bucket but not across buckets\0";
 
 #define FROMFILE 1
 
@@ -18,8 +18,8 @@ static void count()
     int wpos = 0;
     char wordbuf[MAX_WORD_LEN];
     std::ifstream in("../static/sample.txt");
-    int out = 0;
     char c;
+    int maxcnt = 0;
 
 #if FROMFILE
     if (!in.is_open())
@@ -32,22 +32,23 @@ static void count()
     {
         in.get(c);
 #else
-
     while (1)
     {
-
-        char c = text[pos];
+        c = text[pos];
 #endif
         c = tolower(c);
 
-        switch (c)
+        if (c == EOF || c == '\0')
         {
-        case '\0':
-        {
-            out = 1;
+            std::cout << "EOF!\n";
             break;
         }
-        case ' ':
+        else if ('a' <= c && c <= 'z')
+        {
+            wordbuf[wpos] = c;
+            wpos++;
+        }
+        else if (c == ' ')
         {
             if (wpos != 0)
             {
@@ -55,6 +56,9 @@ static void count()
                 if (umap[wordbuf])
                 {
                     umap[wordbuf] += 1;
+                    if (maxcnt < umap[wordbuf]){
+                        maxcnt = umap[wordbuf];
+                    }
                 }
                 else
                 {
@@ -62,30 +66,18 @@ static void count()
                 }
             }
             wpos = 0;
-            break;
-        }
-        case '.':
-        case '!':
-        case '?':
-        case ':':
-        case ',':
-            break;
-        default:
-            wordbuf[wpos] = c;
-            wpos++;
-            break;
         }
 
-        if (out)
-            break;
         pos++;
     }
+
 #if FROMFILE
     in.close();
 #endif
     for (auto elem : umap)
     {
-        std::cout << elem.first << " " << elem.second << "\n";
+        if (elem.second > maxcnt / 10)
+            std::cout << elem.first << " " << elem.second << "\n";
     }
 }
 
