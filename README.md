@@ -11,14 +11,19 @@ make
 # Example apps
 ## rsock
 + Raw socket recv example app.
-+ You need to use sudo to recv rawsocket packet.
++ !! Use sudo when test !!
 
-## stl_map
+## map
 + STL MAP example
 + Read text and count words
+
+## multimap
+ + STL MultiMap example
+ + Read text and record position of words
 
 # Directory
  + TBD
 
 # TODO
  + Add rawsocket send feature
+ + Print MAC addr of packet(Rawsock)

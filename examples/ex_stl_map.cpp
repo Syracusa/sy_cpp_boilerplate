@@ -1,3 +1,5 @@
+/* Count word appearence in text. With unordered_map*/
+
 #include <iostream>
 #include <fstream>
 #include <string>
