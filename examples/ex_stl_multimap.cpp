@@ -1,15 +1,16 @@
+/* Parse every word and it's position into multimap. */
+
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <unordered_map>
+#include <map>
 
-std::unordered_map<std::string, int> umap = {};
+typedef std::pair<std::string, int> wp_pair;
+std::multimap<std::string, int>  mmap = {};
 
 const char *text = "An iterator type whose category, value, difference, pointer and"
                    "reference types are the same as iterator. This iterator"
                    "can be used to iterate through a single bucket but not across buckets\0";
-
-#define FROMFILE 1
 
 #define MAX_WORD_LEN 100
 static void count()
@@ -21,26 +22,13 @@ static void count()
     char c;
     int maxcnt = 0;
 
-#if FROMFILE
-    if (!in.is_open())
-    {
-        std::cerr << "Can't open file\n";
-        return;
-    }
-
-    while (in.good())
-    {
-        in.get(c);
-#else
     while (1)
     {
         c = text[pos];
-#endif
         c = tolower(c);
 
         if (c == EOF || c == '\0')
         {
-            std::cout << "EOF!\n";
             break;
         }
         else if ('a' <= c && c <= 'z')
@@ -53,17 +41,7 @@ static void count()
             if (wpos != 0)
             {
                 wordbuf[wpos] = '\0';
-                if (umap[wordbuf])
-                {
-                    umap[wordbuf] += 1;
-                    if (maxcnt < umap[wordbuf]){
-                        maxcnt = umap[wordbuf];
-                    }
-                }
-                else
-                {
-                    umap[wordbuf] = 1;
-                }
+                mmap.insert(wp_pair(wordbuf, pos));
             }
             wpos = 0;
         }
@@ -71,15 +49,12 @@ static void count()
         pos++;
     }
 
-#if FROMFILE
-    in.close();
-#endif
-    printf("%-20s %-20s\n", "Word", "Count");
+
+    printf("%-20s %-20s\n", "Word", "Position");
     printf("======================================\n");
-    for (auto elem : umap)
-    {       
-        if (elem.second > maxcnt / 10)
-            printf("%-20s %-20d\n", elem.first.c_str(), elem.second);
+    for (auto elem : mmap)
+    {
+        printf("%-20s %-20d\n", elem.first.c_str(), elem.second);
     }
 }
 

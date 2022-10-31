@@ -12,3 +12,5 @@ include_directories(include)
 add_executable(rsock examples/ex_rawsock.cpp lib/sock.cpp)
 
 add_executable(map examples/ex_stl_map.cpp)
+
+add_executable(multimap examples/ex_stl_multimap.cpp)
