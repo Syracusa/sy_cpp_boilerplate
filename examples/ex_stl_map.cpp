@@ -3,6 +3,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "performance.h"
+
 std::unordered_map<std::string, int> umap = {};
 
 const char *text = "An iterator type whose category, value, difference, pointer and"
@@ -14,6 +16,8 @@ const char *text = "An iterator type whose category, value, difference, pointer 
 #define MAX_WORD_LEN 100
 static void count()
 {
+    TIME_MEASURE_START(umap);
+
     int pos = 0;
     int wpos = 0;
     char wordbuf[MAX_WORD_LEN];
@@ -81,6 +85,8 @@ static void count()
         if (elem.second > maxcnt / 10)
             printf("%-20s %-20d\n", elem.first.c_str(), elem.second);
     }
+    
+    TIME_MEASURE_END(umap); 
 }
 
 int main()
