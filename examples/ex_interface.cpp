@@ -6,6 +6,102 @@
 
 /* Class TcpCommunicator from Communicator */
 
+
+/*
+
+main(){
+ DataStoreServer serv = new DataStoreServer(new TcpServer);
+
+
+}
+
+class DataStore(){
+
+  void handle_msg(){
+    
+  }
+}
+
+class DataStoreServer {
+  public NetServer netServ;
+  DataStoreReqMsgHandler hdl;
+  
+  constructor (Netserver serv) {
+     netServ = serv;
+     hdl = New hdl();
+  }
+
+  public work(){
+
+  }
+  while(1){
+    bytearr data = netServ.recv();
+    hdl.handle(data);
+  }
+}
+
+Class TcpServer impl Netserver {
+
+}
+
+Class TcpClient impl NetClient {
+
+}
+
+Class NetServer{
+  in_addr client_addr
+  do_recv()
+  do_send()
+}
+
+Class NetClient{
+  in_addr server_addr
+  do_recv()
+  do_send()
+}
+
+Class DataStoreClient {
+  NetClient cli;
+  DataStoreReqMsgBuilder bld;
+}
+
+Class DataStoreServer {
+  NetServer serv;
+  DataStoreMsgHandler hdlr;
+}
+
+Class DataStoreMsgHandler
+
+Class DataStoreReqMsg {
+  u8 operation
+  u8 dataid
+
+  int bufsz
+  int bufptr
+
+  serialize()
+  deserialize()
+}
+
+Class DataStoreReqMsg : DataSaveReq{
+ u8* data
+
+ serialize(){
+  super.serialize().append(mydata)
+ }
+}
+
+Class DataStoreReqMsg : DataLoadReq{
+ no payload
+ 
+}
+
+Class DataStoreResMsg : DataStoreAck{
+  u8 result;
+}
+ 
+*/
+
 /*
 Rc don't use checksum and stx etx but sc do.
  RawCommunicator impl Communicatable;
