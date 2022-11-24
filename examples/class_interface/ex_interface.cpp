@@ -1,5 +1,13 @@
 #include <iostream>
 
+
+int main()
+{
+  DataStoreServer serv;
+
+  return 0;
+}
+
 /* Abstract Class Communicator */
 
 /* Class UdpCommunicator from Communicator */
