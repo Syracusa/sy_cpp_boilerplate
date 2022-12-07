@@ -37,7 +37,7 @@ class DataStoreServer
     DataStore datastore;
     DataStoreReqMsgBuilder msgBuilder;
     DataStoreRespMsgHandler msgHandler;
-    NetServer server;
+    NetServer &server;
     void mainloop();
 };
 
