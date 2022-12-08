@@ -95,8 +95,7 @@ public:
     int fd;
 
     /* Constructor Function -> Inherited from NetClient */
-    UdpClient(const char *server_ip, int server_port)
-        : NetClient(server_ip, server_port) {}
+    UdpClient(const char *server_ip, int server_port);
 
     /* Overrided Function */
     void sendtoServer(void *data, int len) override;
