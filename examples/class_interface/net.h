@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
+#include <arpa/inet.h>
+#include <sys/socket.h>
 
 class NetServer
 {
@@ -21,7 +23,7 @@ public:
     };
 
     /* Virtual Function */
-    virtual void sendtoClient(void *data, int len) = 0;
+    virtual void sendtoClient(void *data, size_t len) = 0;
     virtual int recvfromClient(void *data) = 0;
 };
 
@@ -31,16 +33,13 @@ private:
 protected:
     int serverPort;
     char serverIpStr[NET_IPSTR_LEN];
+    struct sockaddr_in serverAddr;
 
 public:
     /* Constructor */
-    NetClient(const char *server_ip, int server_port)
-    {
-        this->serverPort = server_port;
-        memcpy(this->serverIpStr, server_ip, NET_IPSTR_LEN);
-    };
+    NetClient(const char *server_ip, int server_port);
 
-    virtual void sendtoServer(void *data, int len) = 0;
+    virtual void sendtoServer(void *data, size_t len) = 0;
     virtual int recvfromServer(void *data) = 0;
 };
 
@@ -51,7 +50,7 @@ public:
     int fd;
 
     /* Public member functions */
-    void sendtoClient(void *data, int len) override;
+    void sendtoClient(void *data, size_t len) override;
     int recvfromClient(void *data) override;
 
     /* Constructor Function -> Inherited from NetServer */
@@ -72,7 +71,7 @@ public:
         : NetClient(server_ip, server_port) {}
 
     /* Overrided Function */
-    void sendtoServer(void *data, int len) override;
+    void sendtoServer(void *data, size_t len) override;
     int recvfromServer(void *data) override;
 };
 
@@ -85,7 +84,7 @@ public:
     UdpServer(int port) : NetServer(port) {};
 
     /* Overrided Function */
-    void sendtoClient(void *data, int len) override;
+    void sendtoClient(void *data, size_t len) override;
     int recvfromClient(void *data) override;
 };
 
@@ -98,7 +97,7 @@ public:
     UdpClient(const char *server_ip, int server_port);
 
     /* Overrided Function */
-    void sendtoServer(void *data, int len) override;
+    void sendtoServer(void *data, size_t len) override;
     int recvfromServer(void *data) override;
 };
 
