@@ -40,7 +40,7 @@ public:
     NetClient(const char *server_ip, int server_port);
 
     virtual void sendtoServer(void *data, size_t len) = 0;
-    virtual int recvfromServer(void *data) = 0;
+    virtual ssize_t recvfromServer(void *buf, size_t buflen) = 0;
 };
 
 class TcpServer : NetServer
@@ -72,7 +72,7 @@ public:
 
     /* Overrided Function */
     void sendtoServer(void *data, size_t len) override;
-    int recvfromServer(void *data) override;
+    ssize_t recvfromServer(void *buf, size_t buflen) override;
 };
 
 class UdpServer : NetServer
@@ -98,7 +98,7 @@ public:
 
     /* Overrided Function */
     void sendtoServer(void *data, size_t len) override;
-    int recvfromServer(void *data) override;
+    ssize_t recvfromServer(void *buf, size_t buflen) override;
 };
 
 #endif

@@ -30,15 +30,18 @@ UdpClient::UdpClient(const char *server_ip, int server_port)
 
 void UdpClient::sendtoServer(void *data, size_t len)
 {
-    struct sockaddr_in addr;
-
     sendto(this->fd, data, len, 0,
            (struct sockaddr *)&this->serverAddr,
            sizeof(this->serverAddr));
 }
 
-int UdpClient::recvfromServer(void *data)
+ssize_t UdpClient::recvfromServer(void *buf, size_t buflen)
 {
+    sockaddr_in recv_addr;
+    socklen_t recv_addr_len;
 
+    return recvfrom(this->fd, buf, buflen, 0,
+                    (struct sockaddr *)&recv_addr,
+                    &recv_addr_len);
     return 0;
 }
