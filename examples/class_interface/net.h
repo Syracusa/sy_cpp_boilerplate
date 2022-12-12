@@ -17,14 +17,11 @@ protected:
 
 public:
     /* Constructor */
-    NetServer(int port)
-    {
-        this->port = port;
-    };
+    NetServer(int port);
 
     /* Virtual Function */
     virtual void sendtoClient(void *data, size_t len) = 0;
-    virtual int recvfromClient(void *data) = 0;
+    virtual ssize_t recvfromClient(void *buf, size_t buflen) = 0;
 };
 
 class NetClient
@@ -51,7 +48,7 @@ public:
 
     /* Public member functions */
     void sendtoClient(void *data, size_t len) override;
-    int recvfromClient(void *data) override;
+    ssize_t recvfromClient(void *buf, size_t buflen) override;
 
     /* Constructor Function -> Inherited from NetServer */
     TcpServer(int port) : NetServer(port) {};
@@ -67,8 +64,7 @@ public:
     int fd;
 
     /* Constructor Function */
-    TcpClient(const char *server_ip, int server_port)
-        : NetClient(server_ip, server_port) {}
+    TcpClient(const char *server_ip, int server_port);
 
     /* Overrided Function */
     void sendtoServer(void *data, size_t len) override;
@@ -81,11 +77,11 @@ public:
     int fd;
 
     /* Constructor Function -> Inherited from NetServer */
-    UdpServer(int port) : NetServer(port) {};
+    UdpServer(int port);
 
     /* Overrided Function */
     void sendtoClient(void *data, size_t len) override;
-    int recvfromClient(void *data) override;
+    ssize_t recvfromClient(void *buf, size_t buflen) override;
 };
 
 class UdpClient : NetClient

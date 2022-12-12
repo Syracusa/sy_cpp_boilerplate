@@ -3,6 +3,13 @@
 #include <iostream>
 #include "net.h"
 
+/* === NetServer Impl === */
+NetServer::NetServer(int port)
+{
+    this->port = port;
+}
+
+/* === NetClient Impl === */
 NetClient::NetClient(const char *server_ip, int server_port)
 {
     this->serverPort = server_port;
@@ -17,6 +24,24 @@ NetClient::NetClient(const char *server_ip, int server_port)
     }
     this->serverAddr.sin_port = htons(server_port);
 };
+
+/* === UdpServer Impl === */
+
+UdpServer::UdpServer(int port)
+    : NetServer(port)
+{
+}
+
+void UdpServer::sendtoClient(void *data, size_t len)
+{
+}
+
+ssize_t recvfromClient(void *buf, size_t buflen)
+{
+    return 0;
+}
+
+/* === UdpClient Impl === */
 
 UdpClient::UdpClient(const char *server_ip, int server_port)
     : NetClient(server_ip, server_port)
@@ -43,5 +68,36 @@ ssize_t UdpClient::recvfromServer(void *buf, size_t buflen)
     return recvfrom(this->fd, buf, buflen, 0,
                     (struct sockaddr *)&recv_addr,
                     &recv_addr_len);
+}
+
+/* === TcpServer Impl === */
+
+TcpServer::TcpServer(int port)
+    : NetServer(port)
+{
+}
+
+void TcpServer::sendtoClient(void *data, size_t len)
+{
+}
+
+ssize_t TcpServer::recvfromClient(void *buf, size_t buflen)
+{
+    return 0;
+}
+
+/* === TcpClient Impl === */
+TcpClient::TcpClient(const char *server_ip, int server_port)
+    : NetClient(server_ip, server_port)
+{
+}
+void TcpClient::sendtoServer(void *data, size_t len)
+{
+    /* TBD */
+}
+
+ssize_t TcpClient::recvfromServer(void *buf, size_t buflen)
+{
+    /* TBD*/
     return 0;
 }
