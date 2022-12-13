@@ -3,6 +3,7 @@
 
 #define NET_IPSTR_LEN 16
 
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
@@ -11,90 +12,102 @@
 
 class NetServer
 {
-private:
-protected:
+    private:
+
+    protected:
     int port;
 
-public:
+    public:
     /* Constructor */
     NetServer(int port);
 
     /* Virtual Function */
-    virtual void sendtoClient(void *data, size_t len) = 0;
-    virtual ssize_t recvfromClient(void *buf, size_t buflen) = 0;
+    virtual ssize_t recvfromClient(void* buf,
+                                   size_t buflen,
+                                   struct sockaddr_in *addr) = 0;
 };
 
 class NetClient
 {
-private:
-protected:
+    private:
+
+    protected:
     int serverPort;
     char serverIpStr[NET_IPSTR_LEN];
     struct sockaddr_in serverAddr;
 
-public:
+    public:
     /* Constructor */
-    NetClient(const char *server_ip, int server_port);
+    NetClient(const char* server_ip, int server_port);
 
-    virtual void sendtoServer(void *data, size_t len) = 0;
-    virtual ssize_t recvfromServer(void *buf, size_t buflen) = 0;
+    virtual ssize_t sendtoServer(const void* data, size_t len) = 0;
+    virtual ssize_t recvfromServer(void* buf, size_t buflen) = 0;
 };
 
-class TcpServer : NetServer
+class TcpServer: NetServer
 {
-public:
-    /* Public member variables */
+    private:
     int fd;
 
+    public:
     /* Public member functions */
-    void sendtoClient(void *data, size_t len) override;
-    ssize_t recvfromClient(void *buf, size_t buflen) override;
+    ssize_t sendtoAllClient(void* data, size_t len);
+    ssize_t recvfromClient(void* buf,
+                           size_t buflen,
+                           struct sockaddr_in *addr) override;
 
-    /* Constructor Function -> Inherited from NetServer */
-    TcpServer(int port) : NetServer(port) {};
+    /* Constructor & Destructor */
+    TcpServer(int port);
 };
 
-class TcpClient : NetClient
+class TcpClient: NetClient
 {
-private:
+    private:
     std::vector<int> clientfds = {};
-
-public:
-    /* Public member variables */
     int fd;
 
-    /* Constructor Function */
-    TcpClient(const char *server_ip, int server_port);
+    public:
+    /* Public memeber Function */
+    ssize_t sendtoServer(const void* data, size_t len) override;
+    ssize_t recvfromServer(void* buf, size_t buflen) override;
 
-    /* Overrided Function */
-    void sendtoServer(void *data, size_t len) override;
-    ssize_t recvfromServer(void *buf, size_t buflen) override;
+    /* Constructor & Destructor */
+    TcpClient(const char* server_ip, int server_port);
 };
 
-class UdpServer : NetServer
+class UdpServer: NetServer
 {
-public:
+    private:
     int fd;
+    int hasClient;
+    struct sockaddr_in recentClient;
 
-    /* Constructor Function -> Inherited from NetServer */
+    public:
+    /* Public Functions */
+    ssize_t sendtoRecentClient(const void* data, size_t len);
+    ssize_t recvfromClient(void* buf,
+                           size_t buflen,
+                           struct sockaddr_in *addr) override;
+
+    /* Constructor & Destructor */
     UdpServer(int port);
+    ~UdpServer() { if (this->fd) close(this->fd); };
 
-    /* Overrided Function */
-    void sendtoClient(void *data, size_t len) override;
-    ssize_t recvfromClient(void *buf, size_t buflen) override;
 };
 
-class UdpClient : NetClient
+class UdpClient: NetClient
 {
-public:
+    private:
     int fd;
 
-    /* Constructor Function -> Inherited from NetClient */
-    UdpClient(const char *server_ip, int server_port);
-
+    public:
     /* Overrided Function */
-    void sendtoServer(void *data, size_t len) override;
-    ssize_t recvfromServer(void *buf, size_t buflen) override;
+    ssize_t sendtoServer(const void* data, size_t len) override;
+    ssize_t recvfromServer(void* buf, size_t buflen) override;
+
+    /* Constructor & Destructor */
+    UdpClient(const char* server_ip, int server_port);
+    ~UdpClient() { if (this->fd) close(this->fd); };
 };
 
 #endif
